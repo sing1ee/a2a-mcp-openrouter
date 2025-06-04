@@ -102,7 +102,9 @@ Migration guide: https://example.com/migration
 ```
 
 # 文字要求
-使用英文。
+- git message 使用英文。
+- 代码注释使用英文
 
 # 项目管理
-- 使用 bun
+- uv 进行项目管理
+- 环境使用 uv venv

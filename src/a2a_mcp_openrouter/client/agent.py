@@ -22,7 +22,7 @@ from a2a.types import (
 )
 from jinja2 import Template
 
-from no_llm_framework.client.constant import GOOGLE_API_KEY
+from a2a_mcp_openrouter.client.constant import GOOGLE_API_KEY
 
 
 dir_path = Path(__file__).parent

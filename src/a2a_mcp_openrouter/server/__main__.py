@@ -16,7 +16,7 @@ from a2a.types import (
     SendMessageResponse,
 )
 
-from no_llm_framework.server.agent_executor import HelloWorldAgentExecutor
+from a2a_mcp_openrouter.server.agent_executor import HelloWorldAgentExecutor
 
 
 class A2ARequestHandler(DefaultRequestHandler):

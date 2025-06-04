@@ -9,7 +9,7 @@ from a2a.types import (
 from a2a.utils import new_agent_text_message, new_task, new_text_artifact
 from typing import override
 
-from src.no_llm_framework.server.agent import Agent
+from src.a2a_mcp_openrouter.server.agent import Agent
 
 
 class HelloWorldAgentExecutor(AgentExecutor):

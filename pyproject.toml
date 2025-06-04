@@ -1,9 +1,9 @@
 [project]
-name = "no-llm-framework"
+name = "a2a-mcp-openrouter"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-authors = [{ name = "prem", email = "prem.ch@ku.th" }]
+authors = [{ name = "milo", email = "zh.milo@gmail.com" }]
 requires-python = ">=3.13"
 dependencies = [
     "a2a-sdk>=0.2.3",
@@ -19,5 +19,5 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project.scripts]
-a2a-server = "no_llm_framework.server.__main__:main"
-a2a-client = "no_llm_framework.client.__main__:main"
+a2a-server = "a2a_mcp_openrouter.server.__main__:main"
+a2a-client = "a2a_mcp_openrouter.client.__main__:main"

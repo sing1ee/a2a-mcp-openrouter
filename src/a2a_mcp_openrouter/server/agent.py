@@ -9,8 +9,8 @@ import google.generativeai as genai
 from jinja2 import Template
 from mcp.types import CallToolResult
 
-from no_llm_framework.server.constant import GOOGLE_API_KEY
-from no_llm_framework.server.mcp import call_mcp_tool, get_mcp_tool_prompt
+from a2a_mcp_openrouter.server.constant import GOOGLE_API_KEY
+from a2a_mcp_openrouter.server.mcp import call_mcp_tool, get_mcp_tool_prompt
 
 dir_path = Path(__file__).parent
 

@@ -4,7 +4,7 @@ from typing import Literal
 
 import asyncclick as click
 import colorama
-from no_llm_framework.client.agent import Agent
+from a2a_mcp_openrouter.client.agent import Agent
 
 
 @click.command()

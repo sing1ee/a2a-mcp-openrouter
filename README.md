@@ -41,7 +41,7 @@ This repository demonstrates how to set up and use the [a2a-python SDK](https://
 ### 1. Start the Server
 
 ```bash
-uv run --env-file .env python -m src.no_llm_framework.server.__main__
+uv run --env-file .env python -m src.a2a_mcp_openrouter.server.__main__
 ```
 - The server will start on port 9999.
 
@@ -50,7 +50,7 @@ uv run --env-file .env python -m src.no_llm_framework.server.__main__
 In a new terminal:
 
 ```bash
-uv run --env-file .env python -m src.no_llm_framework.client --question "What is A2A protocol?"
+uv run --env-file .env python -m src.a2a_mcp_openrouter.client --question "What is A2A protocol?"
 ```
 
 - The client will connect to the server and send a request.
@@ -61,8 +61,8 @@ uv run --env-file .env python -m src.no_llm_framework.client --question "What is
 
 ## File Structure
 
-- `src/no_llm_framework/server/`: Server implementation.
-- `src/no_llm_framework/client/`: Client implementation.
+- `src/a2a_mcp_openrouter/server/`: Server implementation.
+- `src/a2a_mcp_openrouter/client/`: Client implementation.
 - `response.xml`: Example response from the client.
 
 ## Troubleshooting
