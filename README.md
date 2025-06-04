@@ -1,6 +1,6 @@
-# Example: Using a2a-python SDK Without an LLM Framework
+# How to work together: A2A + MCP
 
-This repository demonstrates how to set up and use the [a2a-python SDK](https://github.com/google/a2a-python) to create a simple server and client, without relying on any large language model (LLM) framework.
+This repository demonstrates how to set up and use the [a2a-python SDK](https://github.com/google/a2a-python) to create a simple server and client implement a2a protocol, and the agent sever is implemented by mcp.
 
 ## Overview
 
@@ -17,8 +17,8 @@ This repository demonstrates how to set up and use the [a2a-python SDK](https://
 
 1. **Clone the repository:**
    ```bash
-   git clone <this-repo-url>
-   cd <repo-directory>
+   git clone https://github.com/sing1ee/a2a-mcp-openrouter
+   cd https://github.com/sing1ee/a2a-mcp-openrouter
    ```
 
 2. **Install dependencies:**
@@ -78,3 +78,95 @@ The system uses the following configuration:
 - **Missing dependencies:** Make sure you have `uv` installed.
 - **API key errors:** Ensure `OPENROUTER_API_KEY` is set correctly.
 - **Port conflicts:** Make sure port 9999 is free.
+
+## System Architecture and Flow
+
+Below is a detailed sequence diagram showing the complete flow of the A2A protocol from client input to final response:
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Client as A2A Client
+    participant LLM_Client as OpenRouter LLM (Client)
+    participant Server as A2A Server
+    participant AgentExecutor as Agent Executor
+    participant Agent as Server Agent
+    participant LLM_Server as OpenRouter LLM (Server)
+    participant MCP as MCP Tool
+
+    User->>Client: Input question: "What is A2A protocol?"
+    
+    Note over Client: Initialize Agent with agent_urls
+    Client->>Server: GET /agent-card - Discover available agents
+    Server-->>Client: Return AgentCard with capabilities
+    
+    Note over Client: Render agent prompt template
+    Client->>LLM_Client: Send decision prompt with question and available agents
+    LLM_Client-->>Client: Return JSON with selected agents
+    
+    loop For each selected agent
+        Client->>Server: POST /send-message-streaming
+        
+        Server->>AgentExecutor: execute(context, event_queue)
+        AgentExecutor->>Agent: stream(query)
+        
+        Agent->>MCP: Get available tools
+        MCP-->>Agent: Return tool definitions
+        
+        Note over Agent: Render tool prompt template
+        Agent->>LLM_Server: Send decision prompt with question and tools
+        LLM_Server-->>Agent: Return JSON with selected tools
+        
+        loop For each selected tool (max iterations)
+            Agent->>MCP: Call tool with arguments
+            MCP-->>Agent: Return tool result
+            
+            Note over Agent: Update called_tools history
+            Agent->>LLM_Server: Send updated prompt with tool results
+            LLM_Server-->>Agent: Return next tools or final answer
+            
+            alt More tools needed
+                Note over Agent: Continue to next iteration
+            else Task complete
+                Note over Agent: Task completed
+            end
+        end
+        
+        Agent-->>AgentExecutor: Yield streaming events
+        AgentExecutor-->>Server: Forward events to event_queue
+        Server-->>Client: Stream response chunks via HTTP
+        
+        Client->>Client: Extract answer from response tags
+        Note over Client: Add to agent_answers list
+    end
+    
+    alt Need final synthesis
+        Client->>LLM_Client: Send synthesis prompt with all answers
+        LLM_Client-->>Client: Return final synthesized answer
+    else No synthesis needed
+        Note over Client: Use existing answers
+    end
+    
+    Client-->>User: Stream final response with agent outputs
+
+```
+
+### Key Features
+
+- **Agent Discovery**: Automatic discovery of available agents via A2A protocol
+- **LLM-Driven Selection**: Intelligent agent and tool selection using LLM reasoning
+- **MCP Integration**: Seamless integration with MCP tools for knowledge retrieval
+- **Streaming Pipeline**: Real-time streaming responses throughout the entire pipeline
+- **Iterative Processing**: Multi-iteration tool calling with maintained context
+
+### Flow Description
+
+The system follows these main phases:
+
+**Client Phase**: User inputs question → Client discovers agents → LLM selects relevant agents
+
+**Server Phase**: Server receives request → Agent discovers tools → LLM selects tools → Tools execute iteratively
+
+**Response Phase**: Results stream back through the pipeline → Client synthesizes final answer → User receives response
+
+This architecture demonstrates the power of the A2A protocol in creating interoperable AI agents that can discover each other and collaborate, while leveraging MCP tools for accessing external knowledge sources.
