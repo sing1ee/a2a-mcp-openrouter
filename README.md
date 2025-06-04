@@ -79,6 +79,56 @@ The system uses the following configuration:
 - **API key errors:** Ensure `OPENROUTER_API_KEY` is set correctly.
 - **Port conflicts:** Make sure port 9999 is free.
 
+## A2A vs MCP: Protocol Similarities and Unified Approach
+
+Through this implementation, we discovered that **A2A (Agent-to-Agent)** and **MCP (Model Context Protocol)** share remarkable architectural similarities. Both protocols follow a similar pattern for discovery, capability exchange, and execution.
+
+### Unified Implementation Pattern
+
+**Key Discovery**: Both A2A and MCP follow the same underlying implementation pattern:
+
+- **HTTP-based Communication**: Both use HTTP for communication (A2A uses REST APIs, MCP uses Server-Sent Events)
+- **Prompt-driven Design**: Both rely on LLM prompts to decide what to call and how to call it
+- **Discovery Mechanism**: Both provide ways to discover available capabilities
+- **Structured Responses**: Both return structured data that can be processed programmatically
+
+Looking at the `mcp.py` implementation, we can see:
+```python
+# MCP tool discovery via HTTP
+async with sse_client(url) as (read, write):
+    resources = await session.list_tools()
+    
+# Generate prompt for LLM decision making  
+return template.render(tools=resources.tools)
+
+# Execute tool call via HTTP
+return await session.call_tool(tool_name, arguments=arguments)
+```
+
+This is conceptually identical to A2A agent calling pattern - discover capabilities, use LLM to decide what to call, then execute the call.
+
+### A2A as Universal Interface
+
+**Key Insight**: A2A can serve as a unified interface for both agent-to-agent communication and tool invocation, because the calling patterns are essentially the same:
+
+1. **A2A → Agent**: `Client → HTTP → Agent → LLM Response`
+2. **A2A → Tool**: `Client → HTTP → Tool Wrapper → MCP Tool Response`
+
+Both patterns use:
+- HTTP communication
+- Capability discovery
+- LLM-driven decision making
+- Structured request/response format
+
+### Benefits of This Unified Approach
+
+- **Single Interface**: Clients only need to understand one calling pattern
+- **Interoperability**: Mix agents and tools seamlessly in the same workflow
+- **Consistent Architecture**: Same implementation pattern across different capability types
+- **LLM-native Design**: Both leverage LLM reasoning for intelligent capability selection
+
+This demonstrates that A2A and MCP are not competing protocols but complementary patterns that can be unified under a single interface paradigm.
+
 ## System Architecture and Flow
 
 Below is a detailed sequence diagram showing the complete flow of the A2A protocol from client input to final response:
@@ -148,7 +198,6 @@ sequenceDiagram
     end
     
     Client-->>User: Stream final response with agent outputs
-
 ```
 
 ### Key Features
