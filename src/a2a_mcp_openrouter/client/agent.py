@@ -6,8 +6,8 @@ from pathlib import Path
 from typing import Literal
 from uuid import uuid4
 
-import google.generativeai as genai
 import httpx
+from openai import OpenAI
 from a2a.client import A2ACardResolver, A2AClient
 from a2a.types import (
     AgentCard,
@@ -22,7 +22,11 @@ from a2a.types import (
 )
 from jinja2 import Template
 
-from a2a_mcp_openrouter.client.constant import GOOGLE_API_KEY
+from a2a_mcp_openrouter.client.constant import (
+    OPENROUTER_API_KEY,
+    OPENROUTER_BASE_URL,
+    MODEL_NAME,
+)
 
 
 dir_path = Path(__file__).parent
@@ -46,14 +50,24 @@ def stream_llm(prompt: str) -> Generator[str]:
     Returns:
         Generator[str, None, None]: A generator of the LLM response.
     """
-    genai.configure(api_key=GOOGLE_API_KEY)
-    model = genai.GenerativeModel('gemini-1.5-flash')
-    for chunk in model.generate_content(prompt, stream=True):
-        yield chunk.text
+    client = OpenAI(
+        api_key=OPENROUTER_API_KEY,
+        base_url=OPENROUTER_BASE_URL,
+    )
+    
+    response = client.chat.completions.create(
+        model=MODEL_NAME,
+        messages=[{"role": "user", "content": prompt}],
+        stream=True,
+    )
+    
+    for chunk in response:
+        if chunk.choices[0].delta.content:
+            yield chunk.choices[0].delta.content
 
 
 class Agent:
-    """Agent for interacting with the Google Gemini LLM in different modes."""
+    """Agent for interacting with LLM via OpenRouter in different modes."""
 
     def __init__(
         self,

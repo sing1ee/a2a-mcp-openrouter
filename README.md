@@ -11,7 +11,7 @@ This repository demonstrates how to set up and use the [a2a-python SDK](https://
 
 - Python 3.13+
 - [uv](https://github.com/astral-sh/uv) (for fast dependency management and running)
-- An API key for Gemini (set as `GEMINI_API_KEY`)
+- An API key for OpenRouter (set as `OPENROUTER_API_KEY`)
 
 ## Installation
 
@@ -28,13 +28,15 @@ This repository demonstrates how to set up and use the [a2a-python SDK](https://
 
 3. **Set environment variables:**
    ```bash
-   export GEMINI_API_KEY=your-gemini-api-key
+   export OPENROUTER_API_KEY=your-openrouter-api-key
    ```
 
    Or create a `.env` file with:
    ```
-   GEMINI_API_KEY=your-gemini-api-key
+   OPENROUTER_API_KEY=your-openrouter-api-key
    ```
+
+   **Note:** You can get your OpenRouter API key from [https://openrouter.ai/](https://openrouter.ai/)
 
 ## Running the Example
 
@@ -59,6 +61,12 @@ uv run --env-file .env python -m src.a2a_mcp_openrouter.client --question "What 
 
 - The response from the client will be saved to [response.xml](./response.xml).
 
+## Configuration
+
+The system uses the following configuration:
+- **Model:** `google/gemini-flash-1.5` via OpenRouter
+- **Base URL:** `https://openrouter.ai/api/v1`
+
 ## File Structure
 
 - `src/a2a_mcp_openrouter/server/`: Server implementation.
@@ -68,5 +76,5 @@ uv run --env-file .env python -m src.a2a_mcp_openrouter.client --question "What 
 ## Troubleshooting
 
 - **Missing dependencies:** Make sure you have `uv` installed.
-- **API key errors:** Ensure `GEMINI_API_KEY` is set correctly.
+- **API key errors:** Ensure `OPENROUTER_API_KEY` is set correctly.
 - **Port conflicts:** Make sure port 9999 is free.
