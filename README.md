@@ -43,7 +43,7 @@ This repository demonstrates how to set up and use the [a2a-python SDK](https://
 ### 1. Start the Server
 
 ```bash
-uv run --env-file .env python -m src.a2a_mcp_openrouter.server.__main__
+uv run --env-file .env a2a-server
 ```
 - The server will start on port 9999.
 
@@ -52,7 +52,7 @@ uv run --env-file .env python -m src.a2a_mcp_openrouter.server.__main__
 In a new terminal:
 
 ```bash
-uv run --env-file .env python -m src.a2a_mcp_openrouter.client --question "What is A2A protocol?"
+uv run --env-file .env a2a-client --question "What is A2A protocol?"
 ```
 
 - The client will connect to the server and send a request.
