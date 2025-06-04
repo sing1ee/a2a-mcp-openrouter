@@ -47,6 +47,10 @@ uv run --env-file .env a2a-server
 ```
 - The server will start on port 9999.
 
+validate the agent card: 
+- [a2a protocol validator](https://a2aprotocol.ai/a2a-protocol-validator)
+- Guide: [How to validate your agent card](https://a2aprotocol.ai/blog/how-to-use-a2a-protocol-validator)
+
 ### 2. Run the Client
 
 In a new terminal:
