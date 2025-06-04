@@ -22,7 +22,7 @@ from a2a.types import (
 )
 from jinja2 import Template
 
-from a2a_mcp_openrouter.client.constant import (
+from src.a2a_mcp_openrouter.constant import (
     OPENROUTER_API_KEY,
     OPENROUTER_BASE_URL,
     MODEL_NAME,

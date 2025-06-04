@@ -9,7 +9,7 @@ from openai import OpenAI
 from jinja2 import Template
 from mcp.types import CallToolResult
 
-from a2a_mcp_openrouter.server.constant import (
+from a2a_mcp_openrouter.constant import (
     OPENROUTER_API_KEY,
     OPENROUTER_BASE_URL,
     MODEL_NAME,
